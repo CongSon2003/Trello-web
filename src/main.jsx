@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import CssBaseline from "@mui/material/CssBaseline"; // Hộ trợ các trình duyệt không bị chạy form css
+import CssBaseline from "@mui/material/CssBaseline"; // Nhất quán CSS trên các trình duyệt CSS Baseline
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

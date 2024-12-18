@@ -1,5 +1,6 @@
 import {
   Box,
+  Container,
   FormControl,
   InputLabel,
   MenuItem,
@@ -48,10 +49,46 @@ function App() {
     );
   }
   return (
-    <div>
-      <h1>Hello world</h1>
-      <SelectSmall />
-    </div>
+    <>
+      <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
+        <Box
+          sx={{
+            backgroundColor: "primary.light",
+            height: (theme) => theme.Trello.appBarHeight,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <SelectSmall />
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: "primary.dark",
+            height: (theme) => theme.Trello.boardBarHeight,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            color: "#fff",
+          }}
+        >
+          Board_Bar
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: "primary.main",
+            width: "100%",
+            height: (theme) =>
+              `calc(100vh - ${theme.Trello.boardBarHeight} - ${theme.Trello.appBarHeight})`,
+            display: "flex",
+            alignItems: "center",
+            color: "#fff",
+          }}
+        >
+          Board_Content
+        </Box>
+      </Container>
+    </>
   );
 }
 

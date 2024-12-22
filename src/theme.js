@@ -4,8 +4,8 @@ import { createTheme } from "@mui/material/styles";
 // resource : https://mui.com/material-ui/customization/default-theme/
 const theme = createTheme({
   Trello: {
-    appBarHeight: "48px",
-    boardBarHeight: "56px",
+    appBarHeight: "58px",
+    boardBarHeight: "58px",
   },
   colorSchemes: {
     light: {
@@ -26,6 +26,53 @@ const theme = createTheme({
         secondary: orange,
       },
       // spacing : (factor) => `${0.25 * factor}rem`
+    },
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          //...
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => {
+          return {
+            color: theme.palette.primary.main,
+            fontSize: "0.9rem",
+            ".MuiOutlinedInput-notchedOutline ": {
+              borderColor: theme.palette.primary.light,
+            },
+            "&:hover": {
+              ".MuiOutlinedInput-notchedOutline ": {
+                borderColor: theme.palette.primary.main,
+              },
+            },
+            "& fieldset": {
+              // borderWidth: "2px !important",
+            },
+          };
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: ({ theme }) => {
+          return {
+            color: theme.palette.primary.main,
+            fontSize: "0.9rem",
+          };
+        },
+      },
     },
   },
 });

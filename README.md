@@ -14,3 +14,9 @@ One-off customization
 Reusable component
 Global theme overrides
 Global CSS override
+
+h1, h2, h3, h4, h5, h6: Các tiêu đề (header).
+subtitle1, subtitle2: Tiêu đề phụ.
+body1, body2: Đoạn văn bản cơ bản.
+caption: Chú thích.
+overline: Văn bản gạch chân trên.

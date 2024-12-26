@@ -1,4 +1,4 @@
-import { Button, Menu, MenuItem } from "@mui/material";
+import { Box, Button, Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 const Workspaces = () => {
@@ -11,7 +11,7 @@ const Workspaces = () => {
     setAnchoEl(null);
   };
   return (
-    <div>
+    <Box>
       <Button
         id="Button-Workspaces"
         onClick={handleClick}
@@ -23,6 +23,7 @@ const Workspaces = () => {
           display: "flex",
           alignItems: "center",
           gap: 0.5,
+          color: "white",
         }}
       >
         Workspaces
@@ -38,7 +39,7 @@ const Workspaces = () => {
         <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleClose}>Logout</MenuItem>
       </Menu>
-    </div>
+    </Box>
   );
 };
 

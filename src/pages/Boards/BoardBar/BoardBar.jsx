@@ -1,18 +1,19 @@
 import { Avatar, AvatarGroup, Box, Button, Chip, Tooltip } from "@mui/material";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import PublicIcon from "@mui/icons-material/Public";
 import AddToDriveIcon from "@mui/icons-material/AddToDrive";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import SortIcon from "@mui/icons-material/Sort";
-const MENU_STYLES = {
+// import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+const MENU_STYLES = (theme) => ({
   alignItems: "center",
-  color: "primary.main",
-  bgcolor: "white",
+  color: theme.palette.mode === "dark" ? "white" : "primary.main",
+  bgcolor: theme.palette.mode === "dark" ? "#34495e" : "white",
   borderRadius: "5px",
   "& .MuiSvgIcon-root": {
-    color: "primary.main",
+    color: theme.palette.mode === "dark" ? "white" : "primary.main",
   },
   "& .MuiChip-label": {
     marginTop: "2px",
@@ -20,20 +21,21 @@ const MENU_STYLES = {
   "&:hover": {
     bgcolor: "primary.50",
   },
-};
+});
 const BoardBar = () => {
   return (
     <Box
       sx={{
-        // backgroundColor: "primary.dark",
         height: (theme) => theme.Trello.boardBarHeight,
-        width: "100%",
         display: "flex",
         justifyContent: "space-between",
-        overflow: "auto",
-        borderTop: "1px solid #00bfa5",
+        overflowX: "auto",
+        overflowY: "hidden",
+        // borderTop: "1px solid #00bfa5",
         alignItems: "center",
         paddingX: 2,
+        bgcolor: (theme) => theme.palette.mode === "dark" && "#34495e",
+        // borderBottom: "1px solid #00bfa5",
       }}
     >
       <Box
@@ -46,8 +48,23 @@ const BoardBar = () => {
       >
         <Tooltip title={"Black Morty"}>
           <Chip
-            icon={<DashboardIcon fontSize="small" />}
-            sx={MENU_STYLES}
+            sx={(theme) => ({
+              alignItems: "center",
+              color: theme.palette.mode === "dark" ? "white" : "primary.main",
+              bgcolor: theme.palette.mode === "dark" ? "#34495e" : "white",
+              borderRadius: "5px",
+              "& .MuiSvgIcon-root": {
+                color: "primary.main",
+              },
+              "& .MuiChip-label": {
+                marginTop: "2px",
+                fontWeight: "bold",
+                fontSize: "0.9rem",
+              },
+              "&:hover": {
+                bgcolor: "primary.50",
+              },
+            })}
             label="Black Morty"
             clickable
           />
@@ -71,13 +88,31 @@ const BoardBar = () => {
         <Tooltip title={"Board"}>
           <Button
             startIcon={<SortIcon />}
-            sx={{
+            sx={(theme) => ({
               bgcolor: "#dbe0e6",
-              "&:hover": { bgcolor: "primary.50" },
+              "&:hover": theme.palette.mode === "dark" && { bgcolor: "white" },
               padding: "6px 12px 6px 12px",
-            }}
+              color: theme.palette.mode === "dark" && "black",
+            })}
           >
             Board
+          </Button>
+        </Tooltip>
+        <Tooltip title={"star"}>
+          <Button
+            sx={(theme) => ({
+              "&:hover": { bgcolor: "#dbe0e6" },
+              "&:hover .MuiSvgIcon-root ":
+                theme.palette.mode === "dark"
+                  ? { color: "black" }
+                  : { color: "primary.main" },
+            })}
+          >
+            <StarBorderIcon
+              sx={(theme) => ({
+                color: theme.palette.mode === "dark" && "white",
+              })}
+            />
           </Button>
         </Tooltip>
       </Box>
@@ -113,6 +148,11 @@ const BoardBar = () => {
               fontSize: 15,
               width: 34,
               height: 34,
+              cursor: "pointer",
+              border: "none",
+              "&:first-of-type": {
+                bgcolor: "#a4b0be",
+              },
             },
           }}
         >
@@ -131,11 +171,12 @@ const BoardBar = () => {
         </AvatarGroup>
         <Button
           startIcon={<PersonAddIcon />}
-          sx={{
+          sx={(theme) => ({
             bgcolor: "#dbe0e6",
-            "&:hover": { bgcolor: "primary.50" },
+            "&:hover": theme.palette.mode === "dark" && { bgcolor: "white" },
             padding: "6px 12px 6px 12px",
-          }}
+            color: theme.palette.mode === "dark" && "black",
+          })}
         >
           Share
         </Button>

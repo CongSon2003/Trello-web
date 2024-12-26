@@ -18,7 +18,7 @@ const Templates = () => {
         aria-controls={open ? "Menu-Templates" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : "false"} // (ARIA) Chỉ ra trạng thái mở hoặc đóng của menu.
-        sx={{ fontSize: "0.9rem" }}
+        sx={{ fontSize: "0.9rem", color: "white" }}
       >
         Templates
         <ExpandMoreIcon />

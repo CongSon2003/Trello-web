@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
-import ModeSelect from "~/components/ModeSelect";
+import ModeSelect from "~/components/ModeSelect/ModeSelect";
 import AppsIcon from "@mui/icons-material/Apps";
 import TrelloIcon from "../../assets/trello.svg?react";
 import { SvgIcon } from "@mui/material";
@@ -24,18 +24,20 @@ import Tooltip from "@mui/material/Tooltip";
 import Profile from "./Menu/Profile";
 import { useEffect, useRef, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ClearIcon from "@mui/icons-material/Clear";
 const AppBar = () => {
+  const [searchValue, setSearchValue] = useState("");
   const [anchoEl, setAnchoEl] = useState(null);
   const open = Boolean(anchoEl);
+  const [isActive, setIsActive] = useState(false); // Trạng thái kích thước
+  const boxRef = useRef(null); // Ref để lưu trữ tham chiếu đến Box
+
   const handleClick = (event) => {
     setAnchoEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchoEl(null);
   };
-  const [isActive, setIsActive] = useState(false); // Trạng thái kích thước
-  const boxRef = useRef(null); // Ref để lưu trữ tham chiếu đến Box
-
   const handleClickInside = () => {
     setIsActive(true);
   };
@@ -57,6 +59,18 @@ const AppBar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  const checkColorScheme = () => {
+    const isDarkMode = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+
+    if (isDarkMode) {
+      console.log("Trang đang ở chế độ tối");
+    } else {
+      console.log("Trang đang ở chế độ sáng");
+    }
+  };
+  console.log(checkColorScheme());
   console.log(window.innerHeight);
   return (
     <Box
@@ -68,24 +82,26 @@ const AppBar = () => {
         justifyContent: "space-between",
         paddingX: 2,
         gap: 2,
+        bgcolor: (theme) =>
+          theme.palette.mode === "dark" ? "#2c3e50" : "#2980b9",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-        <AppsIcon fontSize="medium" sx={{ color: "primary.main" }} />
+        <AppsIcon fontSize="medium" sx={{ color: "white" }} />
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
           <Button sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
             <SvgIcon
               component={TrelloIcon}
               inheritViewBox
               fontSize="small"
-              sx={{ color: "primary.main" }}
+              sx={{ color: "white" }}
             />
             <Typography
               variant="span"
               sx={{
                 fontSize: "1rem",
                 fontWeight: "Bold",
-                color: "primary.main",
+                color: "white",
               }}
             >
               Trello
@@ -97,6 +113,7 @@ const AppBar = () => {
             display: { xs: "none", md: "flex" },
             alignItems: "center",
             gap: 1,
+            color: "white",
           }}
         >
           <Workspaces />
@@ -133,7 +150,10 @@ const AppBar = () => {
           </Box>
           <Button
             variant="outlined"
-            sx={{ backgroundColor: "#0C66E4", color: "white" }}
+            sx={(theme) => ({
+              backgroundColor: "#ecf0f1",
+              color: theme.palette.mode === "dark" && "black",
+            })}
           >
             Create
           </Button>
@@ -144,48 +164,77 @@ const AppBar = () => {
           id="outlined-search"
           label="Search..."
           size="small"
-          type="search"
+          type="text"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
           sx={{
             minWidth: isActive
               ? window.innerWidth < 1300
                 ? "50%"
                 : "39%"
-              : "200px",
+              : "150px",
             width: "200px",
             display: { xs: "none", sm: "flex" },
             position: "absolute",
             right: "270px",
             zIndex: 10,
             boxShadow: 0,
-            backgroundColor: "white",
             borderRadius: 1,
+            "& label": {
+              color: "white",
+            },
+            "& input": {
+              color: "white",
+            },
+            "& label.Mui-focused": {
+              color: "white",
+            },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "white",
+              },
+              "&:hover fieldset": {
+                borderColor: "white",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "white",
+              },
+            },
           }}
           ref={boxRef}
           onClick={handleClickInside}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ color: "primary.main" }} />
+                <SearchIcon sx={{ color: "white" }} />
+              </InputAdornment>
+            ),
+            endAdornment: searchValue && (
+              <InputAdornment position="end">
+                <ClearIcon
+                  sx={{ color: "white", fontSize: 18, cursor: "pointer" }}
+                  onClick={() => setSearchValue("")}
+                />
               </InputAdornment>
             ),
           }}
         />
         <Tooltip title="Search" sx={{ display: { xs: "flex", sm: "none" } }}>
           <IconButton>
-            <SearchIcon sx={{ color: "primary.main" }} />
+            <SearchIcon sx={{ color: "white" }} />
           </IconButton>
         </Tooltip>
         <ModeSelect />
         <Tooltip title="Notifications">
-          <Badge color="secondary" variant="dot">
+          <Badge color="warning" variant="dot">
             <IconButton>
-              <NotificationsNoneIcon sx={{ color: "primary.main" }} />
+              <NotificationsNoneIcon sx={{ color: "white" }} />
             </IconButton>
           </Badge>
         </Tooltip>
         <Tooltip title="Information">
           <IconButton>
-            <HelpOutlineIcon sx={{ color: "primary.main" }} />
+            <HelpOutlineIcon sx={{ color: "white" }} />
           </IconButton>
         </Tooltip>
         <Profile />

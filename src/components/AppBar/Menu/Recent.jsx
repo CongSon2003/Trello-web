@@ -37,6 +37,7 @@ const Recent = () => {
           display: "flex",
           alignItems: "center",
           gap: 0.5,
+          color: "white",
         }}
       >
         Rencent

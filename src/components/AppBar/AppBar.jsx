@@ -59,19 +59,6 @@ const AppBar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const checkColorScheme = () => {
-    const isDarkMode = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-
-    if (isDarkMode) {
-      console.log("Trang đang ở chế độ tối");
-    } else {
-      console.log("Trang đang ở chế độ sáng");
-    }
-  };
-  console.log(checkColorScheme());
-  console.log(window.innerHeight);
   return (
     <Box
       sx={{

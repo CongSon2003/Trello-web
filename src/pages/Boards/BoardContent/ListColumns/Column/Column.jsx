@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Box,
   Button,
@@ -11,7 +12,8 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AddIcon from "@mui/icons-material/Add";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import ListCard from "./ListCards/ListCard";
-const Column = () => {
+import { mapOrder } from "~/utilities/sort";
+const Column = ({ Column }) => {
   const [anchoEl, setAnchoEl] = useState(null);
   const open = Boolean(anchoEl);
   const handleClick = (event) => {
@@ -20,6 +22,7 @@ const Column = () => {
   const handleClose = () => {
     setAnchoEl(null);
   };
+  const orderedCards = mapOrder(Column?.cards, Column?.cardOrderIds, "_id");
   return (
     <Box
       sx={{
@@ -51,13 +54,12 @@ const Column = () => {
             padding: "6px 8px 6px 12px",
           }}
         >
-          Collow Title
+          {Column?.title}
         </Typography>
         <Box
           sx={{
             padding: "8px",
             borderRadius: "7px",
-            "&:hover": { bgcolor: "#dbe0e6" },
             height: "40px",
           }}
         >
@@ -84,7 +86,7 @@ const Column = () => {
           </Menu>
         </Box>
       </Box>
-      <ListCard />
+      <ListCard cards={orderedCards} />
       <Box
         sx={{
           height: (theme) => theme.Trello.columnFooterHeight,
@@ -96,7 +98,7 @@ const Column = () => {
       >
         <Button
           startIcon={<AddIcon />}
-          sx={{ "&:hover": { bgcolor: "#dbe0e6" } }}
+          sx={{ "&:hover": { bgcolor: "#505d7f" } }}
         >
           Add a card
         </Button>
@@ -106,7 +108,6 @@ const Column = () => {
             width: "40px",
             borderRadius: "7px",
             cursor: "pointer",
-            "&:hover": { bgcolor: "#dbe0e6" },
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

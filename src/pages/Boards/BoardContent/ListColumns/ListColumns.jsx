@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import { Box, Button } from "@mui/material";
 import Column from "./Column/Column";
 import AddIcon from "@mui/icons-material/Add";
-const ListColumns = () => {
+const ListColumns = ({ columns }) => {
   return (
     <Box
       sx={{
@@ -16,22 +17,9 @@ const ListColumns = () => {
         "&::-webkit-scrollbar-track": { m: 0 },
       }}
     >
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
-      <Column />
+      {columns.map((item) => {
+        return <Column key={item._id} Column={item} />;
+      })}
       <Box
         sx={{
           minWidth: "275px",

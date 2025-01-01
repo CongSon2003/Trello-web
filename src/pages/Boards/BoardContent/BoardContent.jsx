@@ -1,12 +1,14 @@
+/* eslint-disable react/prop-types */
 import { Box } from "@mui/material";
 import ListColumns from "./ListColumns/ListColumns";
-
-const BoardContent = () => {
+import { mapOrder } from "~/utilities/sort";
+const BoardContent = ({ Data }) => {
+  const orderedColumns = mapOrder(Data?.columns, Data?.columnOrderIds, "_id");
   return (
     <Box
       sx={{
         backgroundColor: (theme) =>
-          theme.palette.mode === "dark" ? "#34495e" : "#1976d2",
+          theme.palette.mode === "dark" ? "#192a56" : "#1976d2",
         width: "100%",
         height: (theme) => theme.Trello.boardContentHeight,
         display: "flex",
@@ -14,7 +16,7 @@ const BoardContent = () => {
         gap: 1,
       }}
     >
-      <ListColumns />
+      <ListColumns columns={orderedColumns} />
     </Box>
   );
 };

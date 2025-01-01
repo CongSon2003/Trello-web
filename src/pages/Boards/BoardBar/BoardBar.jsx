@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Avatar, AvatarGroup, Box, Button, Chip, Tooltip } from "@mui/material";
 import PublicIcon from "@mui/icons-material/Public";
 import AddToDriveIcon from "@mui/icons-material/AddToDrive";
@@ -22,7 +23,10 @@ const MENU_STYLES = (theme) => ({
     bgcolor: "primary.50",
   },
 });
-const BoardBar = () => {
+const BoardBar = ({ Data }) => {
+  const firtsStringUpperCase = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
   return (
     <Box
       sx={{
@@ -46,7 +50,7 @@ const BoardBar = () => {
           gap: 2,
         }}
       >
-        <Tooltip title={"Black Morty"}>
+        <Tooltip title={Data?.title}>
           <Chip
             sx={(theme) => ({
               alignItems: "center",
@@ -65,7 +69,7 @@ const BoardBar = () => {
                 bgcolor: "primary.50",
               },
             })}
-            label="Black Morty"
+            label={Data?.title}
             clickable
           />
         </Tooltip>
@@ -73,7 +77,7 @@ const BoardBar = () => {
           <Chip
             icon={<PublicIcon fontSize="small" />}
             sx={MENU_STYLES}
-            label="Change visibility"
+            label={firtsStringUpperCase(Data?.type)}
             clickable
           />
         </Tooltip>

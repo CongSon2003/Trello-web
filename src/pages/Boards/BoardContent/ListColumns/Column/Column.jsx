@@ -13,11 +13,20 @@ import AddIcon from "@mui/icons-material/Add";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import ListCard from "./ListCards/ListCard";
 import { mapOrder } from "~/utilities/sort";
+import { CSS } from "@dnd-kit/utilities";
+import { useSortable } from "@dnd-kit/sortable";
 const Column = ({ Column }) => {
   const [anchoEl, setAnchoEl] = useState(null);
   const open = Boolean(anchoEl);
   const handleClick = (event) => {
     setAnchoEl(event.currentTarget);
+  };
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: Column?._id, data: { ...Column } });
+  const styleColumnsDndKit = {
+    TouchAction: "none",
+    transform: CSS.Translate.toString(transform),
+    transition,
   };
   const handleClose = () => {
     setAnchoEl(null);
@@ -35,6 +44,10 @@ const Column = ({ Column }) => {
         maxHeight: (theme) =>
           `calc(${theme.Trello.boardContentHeight} - ${theme.spacing(4)})`,
       }}
+      ref={setNodeRef}
+      style={styleColumnsDndKit}
+      {...attributes}
+      {...listeners}
     >
       <Box
         sx={{

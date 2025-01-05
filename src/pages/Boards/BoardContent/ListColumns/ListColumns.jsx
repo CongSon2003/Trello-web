@@ -2,47 +2,54 @@
 import { Box, Button } from "@mui/material";
 import Column from "./Column/Column";
 import AddIcon from "@mui/icons-material/Add";
+import {
+  SortableContext,
+  horizontalListSortingStrategy,
+} from "@dnd-kit/sortable";
 const ListColumns = ({ columns }) => {
+  const items = columns.map((item) => item._id); //[{'id1'},{'id1'},{'id1'}] => ['id1','id2','id3']
   return (
-    <Box
-      sx={{
-        bgcolor: "inherit",
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        overflowX: "auto",
-        overflowY: "hidden",
-        p: "12px 0",
-        gap: 1,
-        "&::-webkit-scrollbar-track": { m: 0 },
-      }}
-    >
-      {columns.map((item) => {
-        return <Column key={item._id} Column={item} />;
-      })}
+    <SortableContext items={items} strategy={horizontalListSortingStrategy}>
       <Box
         sx={{
-          minWidth: "275px",
-          maxWidth: "275px",
-          height: "fit-content",
-          bgcolor: "#ffffff3d",
-          borderRadius: "7px",
+          bgcolor: "inherit",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          overflowX: "auto",
+          overflowY: "hidden",
+          p: "12px 0",
+          gap: 1,
+          "&::-webkit-scrollbar-track": { m: 0 },
         }}
       >
-        <Button
-          startIcon={<AddIcon />}
+        {columns.map((item) => {
+          return <Column key={item._id} Column={item} />;
+        })}
+        <Box
           sx={{
-            color: "white",
-            width: "100%",
-            justifyContent: "flex-start",
-            pl: 2.5,
-            py: 1,
+            minWidth: "275px",
+            maxWidth: "275px",
+            height: "fit-content",
+            bgcolor: "#ffffff3d",
+            borderRadius: "7px",
           }}
         >
-          Add another list
-        </Button>
+          <Button
+            startIcon={<AddIcon />}
+            sx={{
+              color: "white",
+              width: "100%",
+              justifyContent: "flex-start",
+              pl: 2.5,
+              py: 1,
+            }}
+          >
+            Add another list
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </SortableContext>
   );
 };
 

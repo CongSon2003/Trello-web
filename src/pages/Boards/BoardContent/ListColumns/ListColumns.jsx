@@ -7,7 +7,7 @@ import {
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 const ListColumns = ({ columns }) => {
-  const items = columns.map((item) => item._id); //[{'id1'},{'id1'},{'id1'}] => ['id1','id2','id3']
+  const items = columns?.map((item) => item._id); //[{'id1'},{'id1'},{'id1'}] => ['id1','id2','id3']
   return (
     <SortableContext items={items} strategy={horizontalListSortingStrategy}>
       <Box

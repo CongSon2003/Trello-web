@@ -18,7 +18,7 @@ import {
   // closestCenter,
 } from "@dnd-kit/core";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { cloneDeep } from "lodash";
+import { cloneDeep, isEmpty } from "lodash";
 import { arrayMove } from "@dnd-kit/sortable";
 import Column from "./ListColumns/Column/Column";
 import CardItem from "./ListColumns/Column/ListCards/Card/Card";
@@ -250,6 +250,21 @@ const BoardContent = ({ Data }) => {
         nextActiveColumn.cards = nextActiveColumn.cards.filter(
           (card) => card._id !== activeDraggingCardId,
         );
+
+        // Thêm Placeholder Card nếu Column rỗng : Bị kéo Hết Card đi, Không còn cái nào trong Columns:
+        console.log(nextActiveColumn);
+        if (isEmpty(nextActiveColumn?.cards)) {
+          // Tạo 1 card mới khi columns emtry và card mới không có title và display : none
+          nextActiveColumn.cards = [
+            {
+              _id: `${nextActiveColumn._id}-placeholder-card`,
+              boardId: `${nextActiveColumn.boardId}`,
+              columnId: nextActiveColumn._id,
+              FE_PlaceholderCard: true, // display : none ở phía FE
+            },
+          ];
+        }
+        console.log(nextActiveColumn);
         // Cập nhật lại mảng CardOrderIds cho dữ liệu
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(
           (item) => item._id,
@@ -266,6 +281,11 @@ const BoardContent = ({ Data }) => {
           newIndex,
           0,
           activeDraggingCardData,
+        );
+        console.log(nextOverColumn);
+        // Delete Placeholder card khi card rỗng và vừa thêm card mới vào
+        nextOverColumn.cards = nextOverColumn.cards.filter(
+          (card) => card.FE_PlaceholderCard !== true,
         );
         // Cập nhật lại mảng CardOrderIds cho dữ liệu
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(
@@ -302,7 +322,6 @@ const BoardContent = ({ Data }) => {
       if (!pointerCollisions?.length) {
         return;
       }
-      console.log(pointerCollisions);
       // Thuật toán phát hiện va chạm sẽ trả về một mảng các va trạm:
       const intersection =
         pointerCollisions?.length > 0
@@ -317,9 +336,7 @@ const BoardContent = ({ Data }) => {
         const checkColumn = orderedColumnsState.find(
           (column) => column._id === overID,
         );
-        console.log(checkColumn);
         if (checkColumn) {
-          console.log("OverID befor", overID);
           overID = closestCorners({
             ...args,
             droppableContainers: args.droppableContainers.filter(
@@ -331,7 +348,6 @@ const BoardContent = ({ Data }) => {
               },
             ),
           })[0]?.id;
-          console.log("OverID after", overID);
         }
         lastOverId.current = overID;
         return [{ id: overID }];

@@ -10,12 +10,12 @@ const Board = () => {
   const [board, SetBoard] = useState(null);
   useEffect(() => {
     // Define the async function inside useEffect
-    const boardId = '67af67f4400a5289ee289f18'
-    fetchBoardDetails_API(boardId).then(board => {
-      SetBoard(board)
-      return
-    })
-  },[])
+    const boardId = "67af67f4400a5289ee289f18";
+    fetchBoardDetails_API(boardId).then((board) => {
+      SetBoard(board);
+      return;
+    });
+  }, []);
   console.log(board);
   return (
     <>

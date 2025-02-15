@@ -193,21 +193,21 @@ export const mockData = {
           },
         ],
       },
-      {
-        _id: "column-id-04",
-        boardId: "board-id-01",
-        title: "Emty Column 04",
-        cardOrderIds: ["column-id-04-placeholder-card"],
-        cards: [
-          {
-            _id: "column-id-04-placeholder-card",
-            boardId: "board-id-01",
-            columnId: "column-id-04",
-            FE_PlaceholderCard: true, // Card nay sẽ ẩn khi ở giao diện người dùng
-            // full {_id, boardId, columnId, FE_PlaceholderCard}
-          },
-        ],
-      },
+      // {
+      //   _id: "column-id-04",
+      //   boardId: "board-id-01",
+      //   title: "Emty Column 04",
+      //   cardOrderIds: ["column-id-04-placeholder-card"],
+      //   cards: [
+      //     {
+      //       _id: "column-id-04-placeholder-card",
+      //       boardId: "board-id-01",
+      //       columnId: "column-id-04",
+      //       FE_PlaceholderCard: true, // Card nay sẽ ẩn khi ở giao diện người dùng
+      //       // full {_id, boardId, columnId, FE_PlaceholderCard}
+      //     },
+      //   ],
+      // },
     ],
   },
 };

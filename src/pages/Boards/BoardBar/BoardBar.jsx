@@ -25,6 +25,7 @@ const MENU_STYLES = (theme) => ({
 });
 const BoardBar = ({ Data }) => {
   const firtsStringUpperCase = (string) => {
+    if(!string) return null;
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
   return (
@@ -50,7 +51,7 @@ const BoardBar = ({ Data }) => {
           gap: 2,
         }}
       >
-        <Tooltip title={Data?.title}>
+        <Tooltip title={Data?.description}>
           <Chip
             sx={(theme) => ({
               alignItems: "center",
@@ -77,7 +78,7 @@ const BoardBar = ({ Data }) => {
           <Chip
             icon={<PublicIcon fontSize="small" />}
             sx={MENU_STYLES}
-            label={firtsStringUpperCase(Data?.type)}
+            label={firtsStringUpperCase(Data?.type) || "Public"}
             clickable
           />
         </Tooltip>

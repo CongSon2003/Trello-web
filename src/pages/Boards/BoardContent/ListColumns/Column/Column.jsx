@@ -118,7 +118,7 @@ const Column = ({ Column }) => {
         >
           <Button
             startIcon={<AddIcon />}
-            sx={{ "&:hover": { bgcolor: "#505d7f" } }}
+            sx={{ "&:hover": { bgcolor: "#dbe0e6" } }}
           >
             Add a card
           </Button>

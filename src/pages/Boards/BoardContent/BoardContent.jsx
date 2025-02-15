@@ -55,7 +55,6 @@ const BoardContent = ({ Data }) => {
   // const sensors = useSensors(pointerSensor);
   const sensors = useSensors(mouseSensor, touchSensor, pointerSensor);
   const [orderedColumnsState, setOrderedColumnsState] = useState([]);
-
   // Cùng một thời điểm chỉ có một phần tử đang được kéo (columns hoặc card)
   const [activeDragItemID, setActiveDragItemID] = useState(null); // id của column hoặc card
   const [oldColumnsDraggingCard, setOldColumnsDraggingCard] = useState(null);

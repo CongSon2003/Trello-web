@@ -4,6 +4,7 @@ import {
   Button,
   Menu,
   MenuItem,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -15,8 +16,22 @@ import ListCard from "./ListCards/ListCard";
 import { mapOrder } from "~/utilities/sort";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
+import ClearIcon from "@mui/icons-material/Clear";
 const Column = ({ Column }) => {
   const [anchoEl, setAnchoEl] = useState(null);
+  const [openNewCard, setOpenNewCard] = useState(false);
+  const [newCardTitle, setNewCardTitle] = useState("");
+  console.log(newCardTitle);
+  const toggleOpenNewCard = () => setOpenNewCard(!openNewCard);
+  const AddCard = () => {
+    if (!newCardTitle) {
+      console.error("Title is required");
+      return;
+    }
+    console.log(newCardTitle);
+    toggleOpenNewCard();
+    setNewCardTitle("");
+  };
   const open = Boolean(anchoEl);
   const handleClick = (event) => {
     setAnchoEl(event.currentTarget);
@@ -116,27 +131,102 @@ const Column = ({ Column }) => {
             justifyContent: "space-between",
           }}
         >
-          <Button
-            startIcon={<AddIcon />}
-            sx={{ "&:hover": { bgcolor: "#dbe0e6" } }}
-          >
-            Add a card
-          </Button>
-          <Box
-            sx={{
-              height: "40px",
-              width: "40px",
-              borderRadius: "7px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Tooltip title="Drag to move">
-              <DragHandleIcon />
-            </Tooltip>
-          </Box>
+          {!openNewCard ? (
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <Button
+                startIcon={<AddIcon />}
+                sx={{ "&:hover": { bgcolor: "#dbe0e6" }, borderRadius: "7px" }}
+                onClick={toggleOpenNewCard}
+              >
+                Add a card
+              </Button>
+              <Box
+                sx={{
+                  height: "40px",
+                  width: "40px",
+                  borderRadius: "7px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Tooltip title="Drag to move">
+                  <DragHandleIcon />
+                </Tooltip>
+              </Box>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                height: "100%",
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <TextField
+                fullWidth
+                autoFocus
+                placeholder="Enter a title card..."
+                variant="outlined"
+                value={newCardTitle}
+                onChange={(e) => setNewCardTitle(e.target.value)}
+                sx={{
+                  ".MuiInputBase-input": { p: "8px" },
+                  "& label": { color: "black" },
+                  "& input": { color: "black" },
+                  "& label.Mui-focused": { color: "black" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "transparent" },
+                    "&:hover fieldset": { borderColor: "transparent" },
+                    "&.Mui-focused fieldset": {
+                      borderColor: (theme) => theme.palette.primary.main,
+                    },
+                  },
+                  "& .MuiOutlinedInput-input": {
+                    borderRadius: "7px",
+                  },
+                }}
+              ></TextField>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Button
+                  onClick={AddCard}
+                  sx={{
+                    fontSize: "0.87rem",
+                    backgroundColor: "#0c66e4",
+                    boxShadow: "none",
+                    color: "white",
+                    "&:hover": {
+                      bgcolor: (theme) => theme.palette.primary.main,
+                    },
+                  }}
+                >
+                  Add
+                </Button>
+                <Box
+                  onClick={toggleOpenNewCard}
+                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                >
+                  <ClearIcon
+                    sx={{
+                      fontSize: "1.5rem",
+                      color: "black",
+                      cursor: "pointer",
+                    }}
+                  />
+                </Box>
+              </Box>
+            </Box>
+          )}
         </Box>
       </Box>
     </div>

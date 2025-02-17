@@ -1,13 +1,28 @@
 /* eslint-disable react/prop-types */
-import { Box, Button } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import Column from "./Column/Column";
 import AddIcon from "@mui/icons-material/Add";
 import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { useState } from "react";
+import ClearIcon from "@mui/icons-material/Clear";
 const ListColumns = ({ columns }) => {
   const items = columns?.map((item) => item._id); //[{'id1'},{'id1'},{'id1'}] => ['id1','id2','id3']
+  const [openNewColumn, setOpenNewColumn] = useState(false);
+  const [newColumnTitle, setNewColumnTitle] = useState("");
+  console.log(newColumnTitle);
+  const toggleOpenNewColumn = () => setOpenNewColumn(!openNewColumn);
+  const AddColumn = () => {
+    if (!newColumnTitle) {
+      console.error("Title is required");
+      return;
+    }
+    console.log(newColumnTitle);
+    toggleOpenNewColumn();
+    setNewColumnTitle("");
+  };
   return (
     <SortableContext items={items} strategy={horizontalListSortingStrategy}>
       <Box
@@ -26,28 +41,94 @@ const ListColumns = ({ columns }) => {
         {columns.map((item) => {
           return <Column key={item._id} Column={item} />;
         })}
-        <Box
-          sx={{
-            minWidth: "275px",
-            maxWidth: "275px",
-            height: "fit-content",
-            bgcolor: "#ffffff3d",
-            borderRadius: "7px",
-          }}
-        >
-          <Button
-            startIcon={<AddIcon />}
+        {!openNewColumn ? (
+          <Box
+            onClick={toggleOpenNewColumn}
             sx={{
-              color: "white",
-              width: "100%",
-              justifyContent: "flex-start",
-              pl: 2.5,
-              py: 1,
+              minWidth: "250px",
+              maxWidth: "250px",
+              height: "fit-content",
+              bgcolor: "#ffffff3d",
+              borderRadius: "7px",
             }}
           >
-            Add another list
-          </Button>
-        </Box>
+            <Button
+              startIcon={<AddIcon />}
+              sx={{
+                color: "white",
+                width: "100%",
+                justifyContent: "flex-start",
+                pl: 2.5,
+                py: 1,
+              }}
+            >
+              Add another list
+            </Button>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              minWidth: "250px",
+              maxWidth: "250px",
+              height: "fit-content",
+              bgcolor: "#ffffff3d",
+              borderRadius: "7px",
+              flexDirection: "column",
+              display: "flex",
+              backgroundColor: "#ebecf0",
+              gap: 1,
+              p: 1,
+            }}
+          >
+            <TextField
+              placeholder="Enter title..."
+              type="text"
+              size="small"
+              variant="outlined"
+              value={newColumnTitle}
+              onChange={(e) => setNewColumnTitle(e.target.value)}
+              autoFocus
+              sx={{
+                "& label": { color: "black" },
+                "& input": { color: "black" },
+                "& label.Mui-focused": { color: "black" },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "transparent" },
+                  "&:hover fieldset": { borderColor: "transparent" },
+                  "&.Mui-focused fieldset": {
+                    borderColor: (theme) => theme.palette.primary.main,
+                  },
+                },
+              }}
+            ></TextField>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={AddColumn}
+                sx={{
+                  backgroundColor: "#0c66e4",
+                  boxShadow: "none",
+                  color: "white",
+                  border: "0.5px solid ",
+                  borderColor: (theme) => theme.palette.primary.main,
+                  "&:hover": { bgcolor: (theme) => theme.palette.primary.main },
+                }}
+              >
+                Add Column
+              </Button>
+              <Box onClick={toggleOpenNewColumn} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <ClearIcon
+                  sx={{
+                    fontSize: "1.5rem",
+                    color: "black",
+                    cursor: "pointer",
+                  }}
+                />
+              </Box>
+            </Box>
+          </Box>
+        )}
       </Box>
     </SortableContext>
   );

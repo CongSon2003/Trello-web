@@ -3,7 +3,7 @@ import { Container } from "@mui/material";
 import AppBar from "~/components/AppBar/AppBar";
 import BoardBar from "./BoardBar/BoardBar";
 import BoardContent from "./BoardContent/BoardContent";
-import { mockData } from "~/apis/mosk-data"; // Mock data
+// import { mockData } from "~/apis/mosk-data"; // Mock data
 import { useEffect, useState } from "react";
 import { fetchBoardDetails_API } from "~/apis";
 const Board = () => {
@@ -21,8 +21,8 @@ const Board = () => {
     <>
       <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
         <AppBar />
-        <BoardBar Data={mockData.board} />
-        <BoardContent Data={mockData.board} />
+        <BoardBar Data={board} />
+        <BoardContent Data={board} />
       </Container>
     </>
   );

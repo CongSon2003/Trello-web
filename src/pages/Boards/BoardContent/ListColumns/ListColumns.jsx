@@ -2,6 +2,7 @@
 import { Box, Button, TextField } from "@mui/material";
 import Column from "./Column/Column";
 import AddIcon from "@mui/icons-material/Add";
+import { toast } from "react-toastify";
 import {
   SortableContext,
   horizontalListSortingStrategy,
@@ -12,17 +13,17 @@ const ListColumns = ({ columns }) => {
   const items = columns?.map((item) => item._id); //[{'id1'},{'id1'},{'id1'}] => ['id1','id2','id3']
   const [openNewColumn, setOpenNewColumn] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState("");
-  console.log(newColumnTitle);
   const toggleOpenNewColumn = () => setOpenNewColumn(!openNewColumn);
   const AddColumn = () => {
     if (!newColumnTitle) {
-      console.error("Title is required");
+      toast.error("Title is required");
       return;
     }
-    console.log(newColumnTitle);
+    notify("Column added successfully")
     toggleOpenNewColumn();
     setNewColumnTitle("");
   };
+  const notify = (message) => toast(message);
   return (
     <SortableContext items={items} strategy={horizontalListSortingStrategy}>
       <Box
@@ -89,6 +90,8 @@ const ListColumns = ({ columns }) => {
               onChange={(e) => setNewColumnTitle(e.target.value)}
               autoFocus
               sx={{
+                backgroundColor: "white",
+                borderRadius: "7px",
                 "& label": { color: "black" },
                 "& input": { color: "black" },
                 "& label.Mui-focused": { color: "black" },
@@ -107,6 +110,7 @@ const ListColumns = ({ columns }) => {
                 color="success"
                 onClick={AddColumn}
                 sx={{
+                  borderRadius: "7px",
                   backgroundColor: "#0c66e4",
                   boxShadow: "none",
                   color: "white",

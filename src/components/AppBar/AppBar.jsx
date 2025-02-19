@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
-import ModeSelect from "~/components/ModeSelect/ModeSelect";
 import AppsIcon from "@mui/icons-material/Apps";
 import TrelloIcon from "../../assets/trello.svg?react";
 import { SvgIcon } from "@mui/material";
@@ -211,7 +210,6 @@ const AppBar = () => {
             <SearchIcon sx={{ color: "white" }} />
           </IconButton>
         </Tooltip>
-        <ModeSelect />
         <Tooltip title="Notifications">
           <Badge color="warning" variant="dot">
             <IconButton>

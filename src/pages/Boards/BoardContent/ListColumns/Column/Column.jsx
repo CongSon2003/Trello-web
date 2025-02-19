@@ -17,17 +17,18 @@ import { mapOrder } from "~/utilities/sort";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 import ClearIcon from "@mui/icons-material/Clear";
+import { toast } from "react-toastify";
 const Column = ({ Column }) => {
   const [anchoEl, setAnchoEl] = useState(null);
   const [openNewCard, setOpenNewCard] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState("");
-  console.log(newCardTitle);
   const toggleOpenNewCard = () => setOpenNewCard(!openNewCard);
   const AddCard = () => {
     if (!newCardTitle) {
-      console.error("Title is required");
+      toast.error("Title is required");
       return;
     }
+    toast.success("Card added successfully");
     console.log(newCardTitle);
     toggleOpenNewCard();
     setNewCardTitle("");
@@ -165,6 +166,7 @@ const Column = ({ Column }) => {
             </Box>
           ) : (
             <Box
+              data-no-dnd="true"
               sx={{
                 height: "100%",
                 display: "flex",
@@ -174,13 +176,17 @@ const Column = ({ Column }) => {
               }}
             >
               <TextField
-                fullWidth
                 autoFocus
+                data-no-dnd="true"
+                type="text"
+                data
                 placeholder="Enter a title card..."
                 variant="outlined"
                 value={newCardTitle}
                 onChange={(e) => setNewCardTitle(e.target.value)}
                 sx={{
+                  backgroundColor: "white",
+                  borderRadius: "7px",
                   ".MuiInputBase-input": { p: "8px" },
                   "& label": { color: "black" },
                   "& input": { color: "black" },
@@ -192,15 +198,14 @@ const Column = ({ Column }) => {
                       borderColor: (theme) => theme.palette.primary.main,
                     },
                   },
-                  "& .MuiOutlinedInput-input": {
-                    borderRadius: "7px",
-                  },
                 }}
               ></TextField>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Button
+                  data-no-dnd="true"
                   onClick={AddCard}
                   sx={{
+                    borderRadius: "7px",
                     fontSize: "0.87rem",
                     backgroundColor: "#0c66e4",
                     boxShadow: "none",

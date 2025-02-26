@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Box } from "@mui/material";
 import ListColumns from "./ListColumns/ListColumns";
-import { mapOrder } from "~/utilities/sort";
+// import { mapOrder } from "~/utilities/sort";
 import {
   DndContext,
   PointerSensor,
@@ -30,7 +30,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 };
 // Cập nhật lại state trong trường hợp di chuyển Card giữa các columns khác nhau
 
-const BoardContent = ({ Data }) => {
+const BoardContent = ({ Data, createNewColumn, createNewCard, moveColumns, moveCardsIn }) => {
   // Yêu cầu chuột di chuyển 10px thì mới kích hoạt envent
   // Nếu dùng pointerSensor mặc định phải kết hợp thuốc tính CSS touch-action : none ở những phần tử kéo thả
   const pointerSensor = useSensor(PointerSensor, {
@@ -153,7 +153,8 @@ const BoardContent = ({ Data }) => {
         const NewCardIndex = oldColumnsDraggingCard.cards?.findIndex(
           (item) => item._id === overCardId,
         );
-
+        console.log("OldcardIndex : ", oldCardIndex);
+        console.log("NewCardIndex : ", NewCardIndex);
         // Xắp sếp card đã kéo thả
         const dndOrderedCards = arrayMove(
           oldColumnsDraggingCard?.cards,
@@ -172,10 +173,11 @@ const BoardContent = ({ Data }) => {
           newColumnCurrent.cardOrderIds = newColumnCurrent?.cards.map(
             (card) => card._id,
           );
-
           // trả về giá trị sau kéo kéo card
           return nextColumn;
         });
+        // Gọi props function moveCards nằm ở component cha (board/_id.js)
+        moveCardsIn(oldColumnsDraggingCard._id, dndOrderedCards);
       }
     }
 
@@ -197,7 +199,9 @@ const BoardContent = ({ Data }) => {
           ActiveID,
           OverId,
         );
+        // Gọi props function moveColumn nằm ở component cha (board/_id.js)
         setOrderedColumnsState(dndOrderedColumns);
+        moveColumns(dndOrderedColumns)
       }
     }
 
@@ -252,7 +256,6 @@ const BoardContent = ({ Data }) => {
         );
 
         // Thêm Placeholder Card nếu Column rỗng : Bị kéo Hết Card đi, Không còn cái nào trong Columns:
-        console.log(nextActiveColumn);
         if (isEmpty(nextActiveColumn?.cards)) {
           // Tạo 1 card mới khi columns emtry và card mới không có title và display : none
           nextActiveColumn.cards = [
@@ -282,7 +285,6 @@ const BoardContent = ({ Data }) => {
           0,
           activeDraggingCardData,
         );
-        console.log(nextOverColumn);
         // Delete Placeholder card khi card rỗng và vừa thêm card mới vào
         nextOverColumn.cards = nextOverColumn.cards.filter(
           (card) => card.FE_PlaceholderCard !== true,
@@ -308,8 +310,9 @@ const BoardContent = ({ Data }) => {
   };
 
   useEffect(() => {
-    const orderedColumns = mapOrder(Data?.columns, Data?.columnOrderIds, "_id");
-    setOrderedColumnsState(orderedColumns);
+    // Data là dữ liệu nấy từ database đã được sắp xếp ở board/_id.js rồi lên không cần sắp xếp ở đây nữa.
+    // const orderedColumns = mapOrder(Data?.columns, Data?.columnOrderIds, "_id");
+    setOrderedColumnsState(Data.columns);
   }, [Data]);
   // args : arguments = Các đối số, tham số
   const collisionDetectionStrategy = useCallback(
@@ -385,7 +388,11 @@ const BoardContent = ({ Data }) => {
             <CardItem card={activeDragItemData} />
           )}
         </DragOverlay>
-        <ListColumns columns={orderedColumnsState} />
+        <ListColumns
+          columns={orderedColumnsState}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+        />
       </Box>
     </DndContext>
   );

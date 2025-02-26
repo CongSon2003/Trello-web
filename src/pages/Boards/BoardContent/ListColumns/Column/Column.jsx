@@ -13,22 +13,34 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AddIcon from "@mui/icons-material/Add";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import ListCard from "./ListCards/ListCard";
-import { mapOrder } from "~/utilities/sort";
+// import { mapOrder } from "~/utilities/sort";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 import ClearIcon from "@mui/icons-material/Clear";
 import { toast } from "react-toastify";
-const Column = ({ Column }) => {
+const Column = ({ Column, createNewCard }) => {
   const [anchoEl, setAnchoEl] = useState(null);
   const [openNewCard, setOpenNewCard] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState("");
   const toggleOpenNewCard = () => setOpenNewCard(!openNewCard);
-  const AddCard = () => {
+  const AddCard = async () => {
     if (!newCardTitle) {
       toast.error("Title is required");
       return;
     }
-    toast.success("Card added successfully");
+    // Tạo data để call api
+    const newCardData = {
+      title : newCardTitle,
+      columnId : Column._id
+    }
+    // Gọi props function createNewCard nằm ở component cha cao nhất là (board/_id.js)
+    const result = await createNewCard(newCardData)
+    console.log(result);
+    if (result) {
+      toast.success("Card added successfully");
+    }else {
+      toast.error("Card creation failed")
+    }
     console.log(newCardTitle);
     toggleOpenNewCard();
     setNewCardTitle("");
@@ -55,7 +67,9 @@ const Column = ({ Column }) => {
   const handleClose = () => {
     setAnchoEl(null);
   };
-  const orderedCards = mapOrder(Column?.cards, Column?.cardOrderIds, "_id");
+  // Column được nấy dữ liệu trong database lên đã sắp xếp ở component cha là (board/_id.js)
+  // const orderedCards = mapOrder(Column?.cards, Column?.cardOrderIds, "_id");
+  const orderedCards = Column.cards
   return (
     // Phải bọc div ở đây vì vẫn đề chiều cao của column khi kéo thả sẽ có bug kiều flickering
     <div ref={setNodeRef} style={styleColumnsDndKit} {...attributes}>
@@ -179,7 +193,6 @@ const Column = ({ Column }) => {
                 autoFocus
                 data-no-dnd="true"
                 type="text"
-                data
                 placeholder="Enter a title card..."
                 variant="outlined"
                 value={newCardTitle}

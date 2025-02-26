@@ -9,17 +9,26 @@ import {
 } from "@dnd-kit/sortable";
 import { useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
-const ListColumns = ({ columns }) => {
+const ListColumns = ({ columns, createNewColumn, createNewCard }) => {
   const items = columns?.map((item) => item._id); //[{'id1'},{'id1'},{'id1'}] => ['id1','id2','id3']
   const [openNewColumn, setOpenNewColumn] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const toggleOpenNewColumn = () => setOpenNewColumn(!openNewColumn);
-  const AddColumn = () => {
+  const AddColumn = async () => {
     if (!newColumnTitle) {
       toast.error("Title is required");
       return;
     }
-    notify("Column added successfully")
+    // Tạo Column
+    const newColumnData = {
+      title: newColumnTitle,
+    };
+    // Gọi props function createNewColumn nằm ở component cha cao nhất là (board/_id.js)
+    await createNewColumn(newColumnData);
+    // Hiện thông báo khi tạo thành công
+    notify("Column added successfully");
+
+    // Đóng trạng thái thêm column và clear data
     toggleOpenNewColumn();
     setNewColumnTitle("");
   };
@@ -40,7 +49,13 @@ const ListColumns = ({ columns }) => {
         }}
       >
         {columns.map((item) => {
-          return <Column key={item._id} Column={item} />;
+          return (
+            <Column
+              key={item._id}
+              Column={item}
+              createNewCard={createNewCard}
+            />
+          );
         })}
         {!openNewColumn ? (
           <Box
@@ -55,6 +70,7 @@ const ListColumns = ({ columns }) => {
           >
             <Button
               startIcon={<AddIcon />}
+              id="addAnotherList"
               sx={{
                 color: "white",
                 width: "100%",
@@ -109,6 +125,7 @@ const ListColumns = ({ columns }) => {
                 variant="contained"
                 color="success"
                 onClick={AddColumn}
+                id="addColumn"
                 sx={{
                   borderRadius: "7px",
                   backgroundColor: "#0c66e4",
@@ -121,7 +138,10 @@ const ListColumns = ({ columns }) => {
               >
                 Add Column
               </Button>
-              <Box onClick={toggleOpenNewColumn} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Box
+                onClick={toggleOpenNewColumn}
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
                 <ClearIcon
                   sx={{
                     fontSize: "1.5rem",

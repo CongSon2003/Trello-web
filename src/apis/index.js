@@ -4,6 +4,11 @@ export const fetchBoardDetails_API = async (boardId) => {
   const response = await axios.get(`http://localhost:8017/v1/boards/${boardId}`)
   return response.data
 }
+// CALL API UPDATE WHEN MOVE CARD
+export const fetchMoveCardsBetweenColumns = async (data) => {
+  const response = await axios.put(`http://localhost:8017/v1/boards/supports/moving_card`, data)
+  return response.data
+}
 // Call API Columns
 export const fetchColumnCreate_API = async (data) => {
   console.log(data);

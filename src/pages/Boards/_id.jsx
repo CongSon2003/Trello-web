@@ -13,6 +13,7 @@ import {
   fetchCardCreate_API,
   fetchBoardUpdate_API,
   fetchColumnUpdate_API,
+  fetchMoveCardsBetweenColumns,
 } from "~/apis";
 import { isEmpty } from "lodash";
 import { mapOrder } from "~/utilities/sort";
@@ -69,13 +70,14 @@ const Board = () => {
     });
     // Cập nhật state board
     const newBoardData = { ...board };
-    newBoardData?.columns
-      ?.find((column) => column._id === response.data.columnId)
-      ?.cardOrderIds.push(response.data._id);
-    newBoardData?.columns
-      ?.find((column) => column._id === response.data.columnId)
-      ?.cards.push(response.data);
-    console.log(newBoardData);
+    const currentColumn = newBoardData?.columns.find((column) => column._id === response.data.columnId);
+    if (currentColumn) {
+      // xoá placeholder-card nếu có : 
+      currentColumn.cards = currentColumn.cards.filter((card) => !card._id.includes(`placeholder-card`));
+      currentColumn.cardOrderIds = currentColumn.cardOrderIds.filter((cardId) => !cardId.includes(`placeholder-card`));
+      currentColumn.cards.push(response.data);
+      currentColumn.cardOrderIds.push(response.data._id);
+    }
     setBoard(newBoardData);
     if (!newBoardData) {
       return false;
@@ -111,17 +113,52 @@ const Board = () => {
     // Gọi API update column trong database
     await fetchColumnUpdate_API(columnId, { cardOrderIds: dndOrderedCardsIds });
   };
+  // Hàm sử lý khi di chuyển card giữa các column
+  /* Khi di chuyển card sang Column khác : 
+    + B1 : Cập nhật mảng cardOrderIds của column cũ ban đầu chứa nó (xóa card đó khỏi mảng cardOrderIds column cũ)
+    + B2 : Cập nhật mảng cardOrderIds của column mới chứa nó (thêm card đó vào mảng cardOrderIds column mới)
+    + B3 : Cập nhật lại trường columnId mới của card đã kéo
+    => Làm API update 2 column chứa card đó
+  */
+  const moveCardsBetweenColumns = async (
+    activeColumID,
+    overColumnID,
+    activeDraggingCardId,
+    dndOrderedColumns,
+  ) => {
+    console.log("moveCardsBetweenColumns : ", board);
+    const dndOrderedColumnIds = dndOrderedColumns.map((item) => item._id);
+    console.log(dndOrderedColumns);
+    const newBoard = { ...board };
+    newBoard.columns = dndOrderedColumns;
+    newBoard.columnOrderIds = dndOrderedColumnIds;
+    setBoard(newBoard);
+    let prevCardOrderIds = dndOrderedColumns.find(column => column._id === activeColumID).cardOrderIds;
+    // Nếu column cũ rỗng thì xóa id placeholder-card
+    if (prevCardOrderIds[0].includes("placeholder-card")) {
+      prevCardOrderIds = [];
+    }
+    console.log(newBoard);
+    // Call API update 2 column
+    fetchMoveCardsBetweenColumns({
+      activeColumID,
+      activeDraggingCardId,
+      overColumnID,
+      prevCardOrderIds: prevCardOrderIds,
+      nextCardOrderIds: dndOrderedColumns.find(column => column._id === overColumnID).cardOrderIds,
+    });
+  };
   if (!board) {
     return (
       <Box
         sx={{
-          display : 'flex',
-          flexDirection : 'column',
-          gap : 2,
-          justifyContent : 'center',
-          alignItems : 'center',
-          width : '100vw',
-          height : '100vh'
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100vw",
+          height: "100vh",
         }}
       >
         <CircularProgress />
@@ -140,6 +177,7 @@ const Board = () => {
           createNewCard={createNewCard}
           moveColumns={moveColumns}
           moveCardsIn={moveCardsIn}
+          moveCardsBetweenColumns={moveCardsBetweenColumns}
         />
       </Container>
     </>

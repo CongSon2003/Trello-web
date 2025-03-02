@@ -30,7 +30,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 };
 // Cập nhật lại state trong trường hợp di chuyển Card giữa các columns khác nhau
 
-const BoardContent = ({ Data, createNewColumn, createNewCard, moveColumns, moveCardsIn }) => {
+const BoardContent = ({ Data, createNewColumn, createNewCard, moveColumns, moveCardsIn, moveCardsBetweenColumns }) => {
   // Yêu cầu chuột di chuyển 10px thì mới kích hoạt envent
   // Nếu dùng pointerSensor mặc định phải kết hợp thuốc tính CSS touch-action : none ở những phần tử kéo thả
   const pointerSensor = useSensor(PointerSensor, {
@@ -109,6 +109,7 @@ const BoardContent = ({ Data, createNewColumn, createNewCard, moveColumns, moveC
         activeColumn,
         activeDraggingCardId,
         activeDraggingCardData,
+        'handleDrageOver'
       );
     }
   };
@@ -121,7 +122,6 @@ const BoardContent = ({ Data, createNewColumn, createNewCard, moveColumns, moveC
 
     // Xử lý kéo thả Cards
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
-      console.log("Kéo Cards");
       if (!over || !active) return;
       const {
         id: activeDraggingCardId,
@@ -143,6 +143,7 @@ const BoardContent = ({ Data, createNewColumn, createNewCard, moveColumns, moveC
           activeColumn,
           activeDraggingCardId,
           activeDraggingCardData,
+          'handleDragEnd'
         );
       } else {
         console.log("Kéo card trong cùng một Column");
@@ -226,6 +227,7 @@ const BoardContent = ({ Data, createNewColumn, createNewCard, moveColumns, moveC
     activeColumn,
     activeDraggingCardId,
     activeDraggingCardData,
+    triggerFrom
   ) => {
     setOrderedColumnsState((prev) => {
       const overCardIndex = overColumn?.cards?.findIndex(
@@ -267,7 +269,6 @@ const BoardContent = ({ Data, createNewColumn, createNewCard, moveColumns, moveC
             },
           ];
         }
-        console.log(nextActiveColumn);
         // Cập nhật lại mảng CardOrderIds cho dữ liệu
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(
           (item) => item._id,
@@ -285,6 +286,8 @@ const BoardContent = ({ Data, createNewColumn, createNewCard, moveColumns, moveC
           0,
           activeDraggingCardData,
         );
+        // Cập nhật lại columnId cho card đang kéo
+        nextOverColumn.cards.find(card => card._id === activeDraggingCardId).columnId = nextOverColumn._id;
         // Delete Placeholder card khi card rỗng và vừa thêm card mới vào
         nextOverColumn.cards = nextOverColumn.cards.filter(
           (card) => card.FE_PlaceholderCard !== true,
@@ -293,6 +296,13 @@ const BoardContent = ({ Data, createNewColumn, createNewCard, moveColumns, moveC
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(
           (item) => item._id,
         );
+      }
+      // Call API moveCardInColumn
+      if (triggerFrom === 'handleDrageOver') {
+        console.log("ColumnID cũ : ", activeColumn._id);
+        console.log("ColumnID mới : ", overColumn._id);
+        console.log("CardID đang kéo: ", activeDraggingCardId);
+        moveCardsBetweenColumns(activeColumn._id, overColumn._id, activeDraggingCardId, nextColumn);
       }
       return nextColumn;
     });

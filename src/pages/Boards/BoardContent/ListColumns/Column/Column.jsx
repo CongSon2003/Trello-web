@@ -2,6 +2,9 @@
 import {
   Box,
   Button,
+  Divider,
+  ListItemIcon,
+  ListItemText,
   Menu,
   MenuItem,
   TextField,
@@ -18,6 +21,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 import ClearIcon from "@mui/icons-material/Clear";
 import { toast } from "react-toastify";
+import { AddCardSharp, ContentCopy, ContentCut, ContentPaste, DeleteForever } from "@mui/icons-material";
 const Column = ({ Column, createNewCard }) => {
   const [anchoEl, setAnchoEl] = useState(null);
   const [openNewCard, setOpenNewCard] = useState(false);
@@ -129,10 +133,27 @@ const Column = ({ Column, createNewCard }) => {
               anchorEl={anchoEl}
               open={open}
             >
-              <MenuItem onClick={handleClose}>Add Card</MenuItem>
-              <MenuItem onClick={handleClose}>Copy list</MenuItem>
-              <MenuItem onClick={handleClose}>Move list</MenuItem>
-              <MenuItem onClick={handleClose}>Remove list</MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><AddCardSharp/></ListItemIcon>
+                <ListItemText>Add new card</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><ContentCut/></ListItemIcon>
+                <ListItemText>Cut list</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><ContentCopy/></ListItemIcon>
+                <ListItemText>Copy list</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><ContentPaste/></ListItemIcon>
+                <ListItemText>Paste list</ListItemText>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><DeleteForever/></ListItemIcon>
+                <ListItemText>Remove list</ListItemText>
+              </MenuItem>
             </Menu>
           </Box>
         </Box>
